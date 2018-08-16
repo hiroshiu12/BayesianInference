@@ -1,3 +1,6 @@
+import numpy as np
+import numpy.linalg as LA
+
 class linear_bayes:
     """
     Representation of Linear Regression
@@ -13,6 +16,8 @@ class linear_bayes:
         """
         self.lam = lam
         self.pre = pre
+        # tranform into vector style
+        mu = mu.reshape(-1,1)
         self.mu = mu
         self.num_dim = num_dim
         
