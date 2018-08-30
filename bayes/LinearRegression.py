@@ -20,7 +20,7 @@ class linear_bayes:
         mu = mu.reshape(-1,1)
         self.mu = mu
         self.num_dim = num_dim
-        
+
     def create_input(self,x):
         """
         x is expected (1,n) numpy.
@@ -45,20 +45,32 @@ class linear_bayes:
         """
         Return : precision matrix, mean vector
         """
+        # store x,y so as to compute marginal likelihood
+        self.x = x
+        self.y = y
+        
         x = self.create_input(x)
-        print(x.shape)
         self.pos_pre = self.lam * (x@x.T) + self.pre
         self.pos_mean = LA.inv(self.pos_pre)@((self.lam * ((y*x).sum(axis=1).reshape(x.shape[0],-1)) + self.pre @ self.mu))
-        
+
         return self.pos_pre, self.pos_mean
     
+    def marginal_dist(self):
+        """
+        Computer "marginal distribution" or "evidence" of p(Y|X). 
+        """
+        
+        evidence = (- 1/2) * ((self.lam * (y **2).sum(0)) - np.log(self.lam) + np.log(2*np.pi) + self.mu.T@self.pre@self.mu - 
+                              np.log(LA.det(self.pre)) -  self.pos_mean.T@self.pos_pre@self.pos_mean + np.log(LA.det(self.pos_pre)))
+        return evidence
+        
     def predict(self,x):
         """
         Return prediction
         """
         x = self.create_input(x)
-        
+
         mu_asta = self.pos_mean.T @ x
         lam_asta = (1/self.lam) + np.diag(x.T@LA.inv(self.pos_pre)@x)
-        
+
         return mu_asta.ravel(),lam_asta.ravel()
