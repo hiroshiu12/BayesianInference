@@ -60,7 +60,7 @@ class linear_bayes:
         Computer "marginal distribution" or "evidence" of p(Y|X). 
         """
         
-        evidence = (- 1/2) * ((self.lam * (y **2).sum(0)) - np.log(self.lam) + np.log(2*np.pi) + self.mu.T@self.pre@self.mu - 
+        evidence = (- 1/2) * ((self.lam * (self.y **2).sum(0)) - np.log(self.lam) + np.log(2*np.pi) + self.mu.T@self.pre@self.mu - 
                               np.log(LA.det(self.pre)) -  self.pos_mean.T@self.pos_pre@self.pos_mean + np.log(LA.det(self.pos_pre)))
         return evidence
         
