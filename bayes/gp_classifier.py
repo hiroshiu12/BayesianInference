@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.linalg as LA
 
-class gaussian_classifier():
+class gp_classifier():
     def __init__(self,):
         """
         Assumed class attribute
