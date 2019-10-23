@@ -28,6 +28,10 @@ class gp_classifier():
             for i in range(X.shape[0])
             for j in range(X.shape[0])
         ]).reshape(X.shape[0],X.shape[0])
+        
+        # Add noize
+        self.C_N = self.C_N + np.diag(np.full(self.C_N.shape[0],0.5))
+        
         # Compute mod of p(a_N|t_N)
         # initialize a_N
         a_N = np.zeros(X.shape[0])
@@ -49,15 +53,15 @@ class gp_classifier():
         W_n = np.diag(
             self._sigmoid(self.pos_mean) * (1 - self._sigmoid(self.pos_mean)))
         lnp_a_asta = -(0.5 * a_N.reshape(1,-1)@LA.inv(self.C_N)@a_N.reshape(-1,1)) \
-                     -(0.5 * self.y.shape[0]*np.log(2*np.pi))
-#                      -(0.5 * np.log(LA.det(self.C_N)))
+                     -(0.5 * self.y.shape[0]*np.log(2*np.pi))\
+                     -(0.5 * LA.slogdet(self.C_N)[1])
 
-#         print('The value of lnp_a_asta :',lnp_a_asta)
+
         lnp_p_tn_a_asta = self.y.reshape(1,-1)@a_N.reshape(-1,1) \
                         -np.log(1+np.exp(a_N)).sum()
-#         print('The value of lnp_p_tn_a_asta : ',lnp_p_tn_a_asta)
+
         ln_wn_cn = 0.5 * (LA.slogdet(W_n + LA.inv(self.C_N))[1])
-#         print('The ln_wn_cn : ',ln_wn_cn)
+
         self.mlh = (lnp_a_asta + lnp_p_tn_a_asta - ln_wn_cn + \
                    (0.5/self.y.shape[0] * np.log(2 * np.pi)))[0][0]
             
