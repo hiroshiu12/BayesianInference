@@ -51,11 +51,6 @@ class gp_classifier():
         lnp_a_asta = -(0.5 * a_N.reshape(1,-1)@LA.inv(self.C_N)@a_N.reshape(-1,1)) \
                      -(0.5 * self.y.shape[0]*np.log(2*np.pi))
 #                      -(0.5 * np.log(LA.det(self.C_N)))
-#         print('determinant of C_N',LA.det(self.C_N))
-#         print('First term', -(0.5 * a_N.reshape(1,-1)@LA.inv(self.C_N)@a_N.reshape(-1,1))[0][0])
-#         print('Second term',-(0.5 * self.y.shape[0]*np.log(2*np.pi)))
-#         print('Third term',-(0.5 * np.log(LA.det(self.C_N))))
-#         print('Third term',-(0.5 * np.log(LA.slogdet(self.C_N)[1])))
 
 #         print('The value of lnp_a_asta :',lnp_a_asta)
         lnp_p_tn_a_asta = self.y.reshape(1,-1)@a_N.reshape(-1,1) \
