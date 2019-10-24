@@ -75,11 +75,7 @@ class gp_classifier():
                 for i in range(X.shape[0])
                 for j in range(self.design_matrix.shape[0])
             ]).reshape(X.shape[0], self.design_matrix.shape[0])
-#         k = self.kernel_func(
-#             np.tile(self.design_matrix,(1,X.shape[0],1)).reshape(X.shape[0],self.design_matrix.shape[0],X.shape[1]),
-#                 np.tile(X,(1,1,self.design_matrix.shape[0])).reshape(X.shape[0],self.design_matrix.shape[0],X.shape[1])
-#             )
-#         print('elapsed time : ', t2-t1)
+
         W_n = np.diag(self._sigmoid(self.pos_mean)*(1-self._sigmoid(self.pos_mean)))
         # Compute mean and cov of p(a_{N+1} | t_N)
         temp_mean = k@(self.y - self._sigmoid(self.pos_mean)).reshape(-1,1).ravel()
